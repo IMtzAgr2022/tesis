@@ -1,5 +1,3 @@
-#pip install opencv-python opencv-python-headless numpy pillow
-
 import cv2
 import numpy as np
 from tkinter import *
