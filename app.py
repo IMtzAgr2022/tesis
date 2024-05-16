@@ -36,9 +36,15 @@ class MeasureApp:
             if cv2.contourArea(c) > 100:  # Umbral de área mínima para considerar el objeto
                 # Obtener el cuadro delimitador
                 x, y, w, h = cv2.boundingRect(c)
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                # Mostrar dimensiones
-                cv2.putText(frame, f"W: {w}px H: {h}px", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)  # Dibujar rectángulo en rojo
+                
+                # Calcular las coordenadas de los extremos
+                pt1 = (x, y)
+                pt2 = (x + w, y + h)
+                
+                # Mostrar las coordenadas de los extremos
+                cv2.putText(frame, f"({pt1[0]}, {pt1[1]})", pt1, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)  # Texto negro
+                cv2.putText(frame, f"({pt2[0]}, {pt2[1]})", pt2, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)  # Texto negro
         
         # Convertir el frame a formato PIL para Tkinter
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
