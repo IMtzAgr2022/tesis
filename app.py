@@ -4,7 +4,6 @@ from tkinter import *
 from PIL import Image, ImageTk
 
 # Constantes de calibración
-KNOWN_DISTANCE = 32  # Distancia conocida entre la cámara y el objeto en centímetros
 KNOWN_WIDTH = 10     # Ancho conocido del objeto en centímetros
 
 class MeasureApp:
@@ -42,12 +41,14 @@ class MeasureApp:
                 x, y, w, h = cv2.boundingRect(c)
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)  # Dibujar rectángulo en rojo
                 
-                # Calcular la distancia del objeto
-                focal_length = (w * KNOWN_DISTANCE) / KNOWN_WIDTH
-                distance_cm = (KNOWN_WIDTH * focal_length) / w
+                # Calcular la distancia del objeto al borde de la imagen (en píxeles)
+                distance_pixels = x if x < frame.shape[1] - x - w else frame.shape[1] - x - w
+                
+                # Calcular la distancia en centímetros
+                distance_cm = (distance_pixels * KNOWN_WIDTH) / w
                 
                 # Mostrar la distancia en la imagen
-                cv2.putText(frame, f"Distancia: {distance_cm:.2f} cm", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)  # Texto negro
+                cv2.putText(frame, f"Distancia al borde: {distance_cm:.2f} cm", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)  # Texto negro
         
         # Convertir el frame a formato PIL para Tkinter
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
